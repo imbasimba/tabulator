@@ -1392,6 +1392,12 @@ RowManager.prototype._virtualRenderFill = function(position, forceMove, offset){
 	onlyGroupHeaders = true,
 	rows = self.getDisplayRows();
 
+	/////////////// ESASKY PATCH ////////////
+	if(!Tabulator.prototype.helpers.elVisible(self.element)){return;}
+	/////////////// END OF ESASKY PATCH ////////////
+	
+	
+
 	position = position || 0;
 
 	offset = offset || 0;
@@ -1417,7 +1423,12 @@ RowManager.prototype._virtualRenderFill = function(position, forceMove, offset){
 		position -= topPad;
 	}
 
-	if(self.displayRowsCount && Tabulator.prototype.helpers.elVisible(self.element)){
+	/////////////// ESASKY PATCH ////////////
+	if (self.displayRowsCount) {
+	/////////////// END OF ESASKY PATCH ////////////
+	/////////// ORIGINAL if statement below //////////////
+	////////if (self.displayRowsCount && Tabulator.prototype.helpers.elVisible(self.element)) {////////
+	
 
 		self.vDomTop = position;
 
