@@ -270,10 +270,6 @@ Ajax.prototype.sendRequest = function(silent){
 
 				self.showError();
 
-				setTimeout(function(){
-					self.hideLoader();
-				}, 3000);
-
 				self.loading = false;
 
 				reject();
