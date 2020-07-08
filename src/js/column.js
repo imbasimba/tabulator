@@ -288,6 +288,10 @@ Column.prototype.checkDefinition = function(){
 	});
 };
 
+Column.prototype.getFormattedValue = function (data) {
+	return this.cells[data.id].element.innerText;
+};
+
 Column.prototype.setField = function(field){
 	this.field = field;
 	this.fieldStructure = field ? (this.table.options.nestedFieldSeparator ? field.split(this.table.options.nestedFieldSeparator) : [field]) : [];
