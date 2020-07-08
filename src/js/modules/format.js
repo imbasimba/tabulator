@@ -673,10 +673,12 @@ Format.prototype.formatters = {
 		return el;
 	},
 
-	rowSelection:function(cell){
+	rowSelection:function(cell, formatterParams, onRendered){
 		var checkbox = document.createElement("input");
 
 		checkbox.type = 'checkbox';
+		var checkboxContainer = document.createElement("div");
+		checkboxContainer.className = "tabulator-checkbox-container";
 
 		if(this.table.modExists("selectRow", true)){
 
@@ -694,6 +696,19 @@ Format.prototype.formatters = {
 				checkbox.checked = row.isSelected();
 				this.table.modules.selectRow.registerRowSelectCheckbox(row, checkbox);
 			}else {
+				var index = this.table.getUniqueCheckboxIndex();
+				checkboxContainer.className = "tabulator-checkbox-container";
+				var checkboxLabel = document.createElement("label");
+				checkboxLabel.htmlFor = 'tabulator-checkbox-' + index;
+				if(formatterParams.title){
+					checkboxLabel.innerHTML = formatterParams.title;
+					checkboxLabel.className = 'tabulator-checkbox-label';
+				} else {
+					checkboxLabel.innerHTML = "_";
+					checkboxLabel.className = 'tabulator-checkbox-label-transparent';
+				}
+				checkbox.id = 'tabulator-checkbox-' + index;
+				checkboxContainer.appendChild(checkboxLabel);
 				checkbox.addEventListener("change", (e) => {
 					if(this.table.modules.selectRow.selectedRows.length){
 						this.table.deselectRow();
@@ -703,9 +718,19 @@ Format.prototype.formatters = {
 				});
 
 				this.table.modules.selectRow.registerHeaderSelectCheckbox(checkbox);
+
+				checkboxContainer.appendChild(checkbox);
+				var invisibleDiv = checkboxLabel.cloneNode(true);
+				invisibleDiv.className += " tabulator-checkbox-invisible-div"; //invisible style
+				
+				var checkboxAndInvisibleDivContainer = document.createElement("div");
+				checkboxAndInvisibleDivContainer.appendChild(checkboxContainer);
+				checkboxAndInvisibleDivContainer.appendChild(invisibleDiv);
+				return checkboxAndInvisibleDivContainer;
 			}
 		}
-		return checkbox;
+		checkboxContainer.appendChild(checkbox);
+		return checkboxContainer;
 	},
 };
 

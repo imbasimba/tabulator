@@ -950,6 +950,11 @@ Tabulator.prototype.searchRows = function(field, type, value){
 	}
 };
 
+Tabulator.prototype._currentCheckboxIndex = 0;
+Tabulator.prototype.getUniqueCheckboxIndex = function() {
+	return Tabulator.prototype._currentCheckboxIndex++;
+};
+
 //search for specific data
 Tabulator.prototype.searchData = function(field, type, value){
 	if(this.modExists("filter", true)){
