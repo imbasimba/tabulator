@@ -40,7 +40,7 @@ Filter.prototype.initializeColumn = function(column, value){
 						type = column.definition.headerFilterFunc;
 						filterFunc = function(data){
 							var params = column.definition.headerFilterFuncParams || {};
-							var fieldVal = column.getFieldValue(data);
+							var fieldVal = column.definition.formatter === "html" ? column.getFormattedValue(data) : column.getFieldValue(data);
 
 							params = typeof params === "function" ? params(value, fieldVal, data) : params;
 
@@ -767,6 +767,19 @@ Filter.prototype.filters ={
 				return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
 			}
 			else{
+				return false;
+			}
+		}
+	},
+
+	//contains the string in the formatted value
+	"likeFormattedValue": function like(filterVal, rowVal, rowData, filterParams) {
+		if (filterVal === null || typeof filterVal === "undefined") {
+			return rowVal === filterVal ? true : false;
+		} else {
+			if (typeof rowVal !== 'undefined' && rowVal !== null) {
+				return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
+			} else {
 				return false;
 			}
 		}
