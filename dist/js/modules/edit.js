@@ -1,6 +1,6 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/* Tabulator v4.7.1 (c) Oliver Folkerd */
+/* Tabulator v4.7.2 (c) Oliver Folkerd */
 
 var Edit = function Edit(table) {
 	this.table = table; //hold Tabulator object
@@ -1809,6 +1809,10 @@ Edit.prototype.editors = {
 		setTimeout(function () {
 			_this2.table.rowManager.element.addEventListener("scroll", cancelItem);
 		}, 10);
+
+		genUniqueColumnValues();
+		input.value = initialDisplayValue;
+		filterList(initialDisplayValue, true);
 
 		return input;
 	},
