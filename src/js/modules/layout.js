@@ -77,36 +77,43 @@ Layout.prototype.modes = {
 		lastCol = false,
 		flexibleColumns = [];
 
-		columns.forEach(function (column) {
+		columns.forEach(function (column){
 			column.reinitializeWidth();
 
-			if (this.table.options.responsiveLayout ? column.modules.responsive.visible : column.visible) {
-				if (!column.widthFixed) {
+			if(this.table.options.responsiveLayout ? column.modules.responsive.visible : column.visible){
+				if(!column.widthFixed){
 					flexibleColumns.push(column);
 				}
 				lastCol = column;
 			}
 
-			if (column.visible) {
+			if(column.visible){
 				colsWidth += column.getWidth();
 			}
 		});
 
-		if (lastCol) {
+		if(lastCol){
 			gap = tableWidth - colsWidth + lastCol.getWidth();
-			if (this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)) {
+			if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 				lastCol.setWidth(0);
 				this.table.modules.responsiveLayout.update();
 			}
 
 			if(gap > lastCol.getWidth() && flexibleColumns.length > 0){
 				var extraWidth = (gap - lastCol.getWidth()) / flexibleColumns.length;
+				var roundingError = 0;
 				flexibleColumns.forEach(function (column) {
-					column.setWidth(column.getWidth() + extraWidth)
+					if(lastCol === column){
+						column.setWidth(column.getWidth() + extraWidth + Math.floor(roundingError));
+					}else{
+						var newWidth = column.getWidth() + extraWidth;
+						roundingError += newWidth % 1;
+						column.setWidth(Math.floor(newWidth));
+					}
 				});
 			}
-		} else {
-			if (this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)) {
+		}else{
+			if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 				this.table.modules.responsiveLayout.update();
 			}
 		}
