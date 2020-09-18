@@ -717,8 +717,8 @@ Format.prototype.formatters = {
 				var index = this.table.getUniqueCheckboxIndex();
 				checkboxContainer.className = "tabulator-checkbox-container";
 				var checkboxLabel = document.createElement("label");
-				checkboxLabel.htmlFor = 'tabulator-checkbox-' + index;
 				if(formatterParams.title){
+					checkboxLabel.htmlFor = 'tabulator-checkbox-' + index;
 					checkboxLabel.innerHTML = formatterParams.title;
 					checkboxLabel.className = 'tabulator-checkbox-label';
 				} else {
