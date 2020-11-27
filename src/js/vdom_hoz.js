@@ -430,8 +430,10 @@ VDomHoz.prototype.initializeRow = function(row){
 			if(column.visible){
 				let cell = row.getCell(column);
 
-				row.getElement().appendChild(cell.getElement());
-				cell.cellRendered();
+				if(cell !== undefined){
+					row.getElement().appendChild(cell.getElement());
+					cell.cellRendered();
+				}
 			}
 		}
 	}
