@@ -36,23 +36,23 @@ ColumnComponent.prototype.isVisible = function(){
 	return this._column.visible;
 };
 
-ColumnComponent.prototype.show = function(){
+ColumnComponent.prototype.show = function(blockRedraw){
 	if(this._column.isGroup){
 		this._column.columns.forEach(function(column){
-			column.show();
+			column.show(undefined, undefined, blockRedraw);
 		});
 	}else{
-		this._column.show();
+		this._column.show(undefined, undefined, blockRedraw);
 	}
 };
 
-ColumnComponent.prototype.hide = function(){
+ColumnComponent.prototype.hide = function(blockRedraw){
 	if(this._column.isGroup){
 		this._column.columns.forEach(function(column){
-			column.hide();
+			column.hide(undefined, undefined, blockRedraw);
 		});
 	}else{
-		this._column.hide();
+		this._column.hide(undefined, undefined, blockRedraw);
 	}
 };
 
@@ -289,6 +289,11 @@ Column.prototype.checkDefinition = function(){
 };
 
 Column.prototype.getFormattedValue = function (data) {
+	if(this.cells[data.id] == undefined){
+		var template = document.createElement('template');
+		template.innerHTML = data.name;
+		return template.content.firstChild;
+	}
 	return this.cells[data.id].element.innerText;
 };
 
@@ -1023,11 +1028,15 @@ Column.prototype.checkColumnVisibility = function(){
 };
 
 //show column
-Column.prototype.show = function(silent, responsiveToggle){
+Column.prototype.show = function(silent, responsiveToggle, blockRedraw){
 	if(!this.visible){
 		this.visible = true;
 
 		this.element.style.display = "";
+
+		if(blockRedraw){
+			return;
+		}
 
 		if(this.parent.isGroup){
 			this.parent.checkColumnVisibility();
@@ -1059,18 +1068,22 @@ Column.prototype.show = function(silent, responsiveToggle){
 			this.parent.matchChildWidths();
 		}
 
-		if(!this.silent && this.table.options.virtualDomHoz){
-			this.table.vdomHoz.reinitialize();
-		}
+		// if(!this.silent && this.table.options.virtualDomHoz){
+		// 	this.table.vdomHoz.reinitialize();
+		// }
 	}
 };
 
 //hide column
-Column.prototype.hide = function(silent, responsiveToggle){
+Column.prototype.hide = function(silent, responsiveToggle, blockRedraw){
 	if(this.visible){
 		this.visible = false;
 
 		this.element.style.display = "none";
+
+		if(blockRedraw){
+			return;
+		}
 
 		this.table.columnManager._verticalAlignHeaders();
 
@@ -1098,9 +1111,9 @@ Column.prototype.hide = function(silent, responsiveToggle){
 			this.parent.matchChildWidths();
 		}
 
-		if(!this.silent && this.table.options.virtualDomHoz){
-			this.table.vdomHoz.reinitialize();
-		}
+		// if(!this.silent && this.table.options.virtualDomHoz){
+		// 	this.table.vdomHoz.reinitialize();
+		// }
 	}
 };
 
