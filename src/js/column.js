@@ -289,12 +289,9 @@ Column.prototype.checkDefinition = function(){
 };
 
 Column.prototype.getFormattedValue = function (data) {
-	if(this.cells[data.id] == undefined){
-		var template = document.createElement('template');
-		template.innerHTML = data.name;
-		return template.content.firstChild;
-	}
-	return this.cells[data.id].element.innerText;
+	var template = document.createElement('template');
+	template.innerHTML = data.name;
+	return template.content.textContent;
 };
 
 Column.prototype.setField = function(field){
